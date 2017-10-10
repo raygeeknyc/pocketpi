@@ -1,0 +1,6 @@
+#!/bin/sh
+# /etc/dhcp/dhclient-enter-hooks.d/advertise
+/usr/bin/logger "$0"
+my_addr=$(ifconfig | grep "inet addr" | grep -v "127.0.0.1" | awk '{print $2}' | awk 'BEGIN { FS = ":" } ; {print $2}')
+echo "<1>networking up $my_addr" | sudo tee /dev/kmsg
+/usr/bin/logger "networking up $my_addr"
