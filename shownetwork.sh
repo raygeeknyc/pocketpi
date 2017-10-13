@@ -1,6 +1,7 @@
 #!/bin/bash
 timeout_secs=4
-SETCOLOR="python rgbled.py"
+# TODO(raymond) replace the below absolute path with something relative to the resolved $0
+SETCOLOR="python /usr/local/bin/rgbled.py"
 RED="1,0,0"
 GREEN="0,1,0"
 endTime=$(( $(date +%s) + timeout_secs )) # Calculate end time.
