@@ -1,8 +1,10 @@
+import logging
 import time
 import RPi.GPIO as GPIO
 import threading
 import sys
 
+logging.getLogger().setLevel(logging.INFO)
 # Demo pin definitions:
 redPin = 2
 greenPin = 3
@@ -72,8 +74,7 @@ class RgbLed:
         elif self._color is OFF:
             self.setColor(RED)
 
-if __name__ == "__main__":
-    demo = RgbLed(redPin, greenPin, bluePin, common_anode=False)
+def runDemo(demo):
     print("OFF")
     demo.setColor(OFF)
     time.sleep(2)
@@ -98,7 +99,6 @@ if __name__ == "__main__":
     demo.setColor(WHITE)
     time.sleep((0.5))
     demo.setColor(OFF)
-
     sleepLed = threading.Thread(target = demo.cycle, args=(2,))
     sleepLed.start()
     response = raw_input("waiting for you before stopping... ")
@@ -106,5 +106,16 @@ if __name__ == "__main__":
     print "waiting for LED to stop cycling"
     sleepLed.join()
     demo.setColor(OFF)
-    GPIO.cleanup()
+
+if __name__ == "__main__":
+    led = RgbLed(redPin, greenPin, bluePin, common_anode=False)
+    led.setColor(OFF)
+    if len(sys.argv) > 1:
+        r,g,b = sys.argv[1].split(",")
+        logging.info("R,G,B=({},{},{})".format(r,g,b))
+        led.setColor((int(r),int(g),int(b)))
+        time.sleep(5)
+    else:
+        runDemo(led)
+        GPIO.cleanup()
     sys.exit()
