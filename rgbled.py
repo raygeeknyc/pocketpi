@@ -112,7 +112,7 @@ if __name__ == "__main__":
     led.setColor(OFF)
     if len(sys.argv) > 1:
         r,g,b = sys.argv[1].split(",")
-        logging.info("R,G,B=({},{},{})".format(r,g,b))
+        logging.debug("R,G,B=({},{},{})".format(r,g,b))
         led.setColor((int(r),int(g),int(b)))
         time.sleep(5)
     else:
