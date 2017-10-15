@@ -1,6 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 # /etc/dhcp/dhclient-enter-hooks.d/advertise
+# At boot, the ADDR_FILE should be cleared out
 /usr/bin/logger "$0"
+ADDR_FILE=/tmp/advertise_addr.txt
 my_addr=$(ifconfig | grep "inet addr" | grep -v "127.0.0.1" | awk '{print $2}' | awk 'BEGIN { FS = ":" } ; {print $2}')
-echo "<1>networking up $my_addr" | sudo tee /dev/kmsg
-/usr/bin/logger "networking up $my_addr"
+old_addr=$(cat $ADDR_FILE)
+if [[ "$my_addr" != "$old_addr" ]] ;then
+  echo "<1>networking up $my_addr" | sudo tee /dev/kmsg
+  /usr/bin/logger "networking up $my_addr"
+  echo "$my_addr" > $ADDR_FILE
+fi
